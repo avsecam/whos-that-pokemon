@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { ThemeProp } from 'react-native-paper/lib/typescript/types';
+import { Game } from './src/game'
+import { Settings } from './src/settings';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const PaperTheme: ThemeProp = {
+	...DefaultTheme
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator()
+
+export default function App() {
+	return (
+		<PaperProvider theme={PaperTheme}>
+			<NavigationContainer>
+				<Stack.Navigator>
+					<Stack.Screen name='Game' component={Game} />
+					<Stack.Screen name='Settings' component={Settings} />
+				</Stack.Navigator>
+			</NavigationContainer>
+		</PaperProvider>
+	);
+}
