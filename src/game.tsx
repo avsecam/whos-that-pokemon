@@ -1,13 +1,18 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useContext } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Surface } from "react-native-paper";
-import Choices from "./components/radioButton";
+import Choices from "./components/choicePicker";
+import { GameContext } from "./context/gameContext";
 
 export function Game() {
+	const { pokemon } = useContext(GameContext)
+
 	return (
 		<>
 			<View style={styles.container}>
 				<Surface style={styles.pokemonContainer}>
-					<Text>Pokemon</Text>
+					<Image source={{ uri: pokemon.sprites.front_default, height: 300, width: 300 }} style={styles.pokemon} />
+					<Image source={{ uri: pokemon.sprites.front_default, height: 300, width: 300 }} style={styles.overlay} />
 				</Surface>
 				<Choices />
 			</View>
@@ -27,6 +32,10 @@ const styles = StyleSheet.create({
 		aspectRatio: 1,
 		justifyContent: "center",
 		alignItems: "center",
+	},
+
+	overlay: {
+		position: "absolute",
 	},
 
 	choicesContainer: {
