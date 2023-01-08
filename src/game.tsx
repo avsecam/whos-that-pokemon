@@ -1,18 +1,37 @@
-import { useContext } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Brightness } from "react-native-color-matrix-image-filters/dist/color-matrix-filters";
 import { Surface } from "react-native-paper";
 import Choices from "./components/choicePicker";
 import { GameContext } from "./context/gameContext";
 
 export function Game() {
+	const imageSize: number = 300
+
 	const { pokemon } = useContext(GameContext)
+	const wipeProgress = useRef(new Animated.Value(0.0)).current
+	const [pokemonShown, setPokemonShown] = useState<boolean>(false)
+
+	function togglePokemonVisibility() {
+			Animated.timing(wipeProgress, {
+				toValue: (pokemonShown) ? 1.0 : 0.0,
+				duration: 200,
+				useNativeDriver: false,
+			}).start()
+	}
+
+	useEffect(() => {
+		togglePokemonVisibility()
+	}, [pokemonShown])
 
 	return (
 		<>
 			<View style={styles.container}>
 				<Surface style={styles.pokemonContainer}>
-					<Image source={{ uri: pokemon.sprites.front_default, height: 300, width: 300 }} style={styles.pokemon} />
-					<Image source={{ uri: pokemon.sprites.front_default, height: 300, width: 300 }} style={styles.overlay} />
+					<Pressable onPress={() => {setPokemonShown(!pokemonShown);}} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
+						<Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: "black" }} />
+						<Animated.Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
+					</Pressable>
 				</Surface>
 				<Choices />
 			</View>
@@ -32,10 +51,6 @@ const styles = StyleSheet.create({
 		aspectRatio: 1,
 		justifyContent: "center",
 		alignItems: "center",
-	},
-
-	overlay: {
-		position: "absolute",
 	},
 
 	choicesContainer: {
