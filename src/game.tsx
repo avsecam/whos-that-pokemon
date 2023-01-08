@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { Brightness } from "react-native-color-matrix-image-filters/dist/color-matrix-filters";
-import { Surface } from "react-native-paper";
+import { MD3Theme, Surface, useTheme } from "react-native-paper";
 import Choices from "./components/choicePicker";
 import { GameContext } from "./context/gameContext";
 
 export function Game() {
+	const theme: MD3Theme = useTheme()
 	const imageSize: number = 300
 
 	const { pokemon } = useContext(GameContext)
@@ -28,8 +28,8 @@ export function Game() {
 		<>
 			<View style={styles.container}>
 				<Surface style={styles.pokemonContainer}>
-					<Pressable onPress={() => {setPokemonShown(!pokemonShown);}} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
-						<Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: "black" }} />
+					<Pressable onPress={() => {setPokemonShown(!pokemonShown)}} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
+						<Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
 						<Animated.Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
 					</Pressable>
 				</Surface>

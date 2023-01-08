@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { View, Pressable, Text, StyleSheet, Animated, Dimensions, Easing } from "react-native";
-import { IconButton } from "react-native-paper";
+import { IconButton, MD3Theme, useTheme } from "react-native-paper";
 import { GameContext } from "../context/gameContext";
 
 
@@ -37,6 +37,7 @@ function ChoiceButton({
 	onPress?: () => void,
 	showCorrectness?: boolean,
 }) {
+	const theme: MD3Theme = useTheme()
 	const { pokemon } = useContext(GameContext)
 
 	const colorRight: string = "limegreen"
@@ -49,11 +50,8 @@ function ChoiceButton({
 
 	useEffect(() => {
 		// Animate to wipe green or red
-		if (showCorrectness) {
-			wipeIn()
-		} else {
-			wipeProgress.setValue(0)
-		}
+		if (showCorrectness) wipeIn()
+		else wipeProgress.setValue(0)
 	}, [showCorrectness])
 
 	function wipeIn() {
@@ -69,7 +67,7 @@ function ChoiceButton({
 		<>
 			<Pressable onPress={onPress} style={styles.choiceButton}>
 				<Animated.View style={[styles.choiceOverlay, { backgroundColor: (isCorrect) ? colorRight : colorWrong, width: wipeProgress }]} />
-				<Text style={{ color: "black" }}>{text ? text : null}</Text>
+				<Text style={{ color: theme.colors.primary, fontSize: theme.fonts.headlineMedium.fontSize }}>{text ? text : null}</Text>
 			</Pressable>
 		</>
 	)
