@@ -1,10 +1,16 @@
+import { ParamListBase } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { MD3Theme, Surface, useTheme } from "react-native-paper";
 import Choices from "./components/choicePicker";
+import Header from "./components/header";
 import { GameContext } from "./context/gameContext";
 
-export function Game() {
+export default function Game({
+	navigation
+}: NativeStackScreenProps<ParamListBase>
+) {
 	const theme: MD3Theme = useTheme()
 	const imageSize: number = 300
 
@@ -13,11 +19,11 @@ export function Game() {
 	const [pokemonShown, setPokemonShown] = useState<boolean>(false)
 
 	function togglePokemonVisibility() {
-			Animated.timing(wipeProgress, {
-				toValue: (pokemonShown) ? 1.0 : 0.0,
-				duration: 200,
-				useNativeDriver: false,
-			}).start()
+		Animated.timing(wipeProgress, {
+			toValue: (pokemonShown) ? 1.0 : 0.0,
+			duration: 200,
+			useNativeDriver: false,
+		}).start()
 	}
 
 	useEffect(() => {
@@ -26,9 +32,10 @@ export function Game() {
 
 	return (
 		<>
+			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
 			<View style={styles.container}>
 				<Surface style={styles.pokemonContainer}>
-					<Pressable onPress={() => {setPokemonShown(!pokemonShown)}} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
+					<Pressable onPress={() => { setPokemonShown(!pokemonShown) }} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
 						<Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
 						<Animated.Image source={{ uri: pokemon.sprites.front_default, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
 					</Pressable>
@@ -68,3 +75,4 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	}
 })
+
