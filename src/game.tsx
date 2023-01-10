@@ -14,7 +14,8 @@ export default function Game({
 	const theme: MD3Theme = useTheme()
 	const imageSize: number = 300
 
-	const { pokemon } = useContext(GameContext)
+	const { gameState } = useContext(GameContext)
+	const pokemon = gameState.pokemon
 	const wipeProgress = useRef(new Animated.Value(0.0)).current
 	const [pokemonShown, setPokemonShown] = useState<boolean>(false)
 

@@ -4,36 +4,61 @@ import dewott from "../../dewott.json"
 
 // REMEMBER: After setting generation or when opening app, fetch pokemon list. Maybe save to cache
 
-type GameContext = {
-	generations: string[], // Which generations to pick from
+type GameState = {
 	pokemon: typeof dewott, // TODO: change this when you are going to use the API
 	choices: [string, string, string, string],
 	choice: string,
-	setContext: React.Dispatch<React.SetStateAction<GameContext>>,
+}
+
+type GameContext = {
+	gameState: GameState,
+	generations: string[], // Which generations to pick from. IDs
+	addGeneration: (id: string) => void,
+	removeGeneration: (id: string) => void,
 	choose: (choice: string) => boolean, // true iff correct
 }
 
 export const GameContext = createContext({} as GameContext)
 
 export function GameProvider({ children }: { children: JSX.Element }) {
-	const [context, setContext] = useState({
+	const [gameState, setGameState] = useState<GameState>({
 		pokemon: dewott,
-		choices: ["A", "Dewott", "C", "D"]
-	} as GameContext)
+		choices: ["A", "Dewott", "C", "D"],
+		choice: ""
+	})
 
-	useEffect(() => {console.log(context.generations)}, [context.generations])
+	const [generations, setGenerations] = useState<string[]>([])
+
+	useEffect(() => {
+		console.log(generations)
+	}, [generations])
+
+	function addGeneration(id: string) { // Add generation if it isn't in the array yet
+		let newGenerations: string[] = []
+		if (generations !== undefined) {
+			newGenerations = (generations.find(val => val === id)) ? generations : [...generations, id]
+		} else {
+			newGenerations = [id]
+		}
+		setGenerations(newGenerations)
+	}
+	
+	function removeGeneration(id: string) {
+		if (generations === undefined) return
+		setGenerations(generations.filter(val => val === id))
+	}
 
 	function choose(choice: string) {
 		const choiceLowercase: string = choice.toLowerCase()
-		setContext({
-			...context,
+		setGameState({
+			...gameState,
 			choice: choiceLowercase
 		})
-		return (choiceLowercase === context.pokemon.name)
+		return (choiceLowercase === gameState.pokemon.name)
 	}
 
 	return (
-		<GameContext.Provider value={{ ...context, choose, setContext }}>
+		<GameContext.Provider value={{ gameState, generations, addGeneration, removeGeneration, choose }}>
 			{children}
 		</GameContext.Provider>
 	)

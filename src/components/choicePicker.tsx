@@ -5,7 +5,8 @@ import { GameContext } from "../context/gameContext";
 
 
 export default function Choices() {
-	const { choices, choose } = useContext(GameContext)
+	const { gameState, choose } = useContext(GameContext)
+	const choices = gameState.choices
 	const [playerHasChosen, setPlayerHasChosen] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -38,7 +39,8 @@ function ChoiceButton({
 	showCorrectness?: boolean,
 }) {
 	const theme: MD3Theme = useTheme()
-	const { pokemon } = useContext(GameContext)
+	const { gameState } = useContext(GameContext)
+	const pokemon = gameState.pokemon
 
 	const colorRight: string = "limegreen"
 	const colorWrong: string = "red"

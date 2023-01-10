@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage/"
 import { useContext, useEffect, useState } from "react"
-import { Text, View } from "react-native"
+import { GestureResponderEvent, Text, View } from "react-native"
 import { Button, Checkbox, List } from "react-native-paper"
-import { getGenerations } from "./api/fetch"
+import { formatGenerationName, getGenerations, LinkData } from "./api/generations"
 import Header from "./components/header"
 import { GameContext } from "./context/gameContext"
 
@@ -19,23 +19,39 @@ export function Settings() {
 }
 
 function GenerationPicker() {
-	const { generations } = useContext(GameContext)
+	const [generationList, setGenerationList] = useState<LinkData[]>([])
 
-	let allGenerations
 	useEffect(() => {
 		(async () => {
-			allGenerations = await getGenerations()
+			setGenerationList(await getGenerations())
 		})()
-	}, [allGenerations])
+	}, [])
 
-	// const generationCheckboxes: JSX.Element[] = allGenerations.map(gen => 
-	// 	<Checkbox.Item label={gen.name} />
-	// )
+	const rows: JSX.Element[] = generationList.map(gen => <GenerationRow generation={gen} key={gen.id} />)
 
 	return (
 		<>
-			<List.Accordion title="Generations" onPress={async () => console.log(await AsyncStorage.getItem("generation-i"))}>
+			<List.Accordion title="Generations">
+				{rows}
 			</List.Accordion>
 		</>
 	)
+}
+
+function GenerationRow({
+	generation
+}: {
+	generation: LinkData
+}) {
+	const { generations, addGeneration, removeGeneration } = useContext(GameContext)
+	const [checked, setChecked] = useState<boolean>(generations.find(gen => gen === generation.name) ? true : false)
+
+	function handlePress() {
+		console.log(generation)
+		if (checked) removeGeneration(generation.name)
+		else addGeneration(generation.name)
+		setChecked(!checked)
+	}
+
+	return <Checkbox.Item label={formatGenerationName(generation.name)} onPress={handlePress} status={checked ? "checked" : "unchecked"} />
 }
