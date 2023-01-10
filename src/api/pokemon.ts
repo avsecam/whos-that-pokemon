@@ -42,7 +42,7 @@ export async function getRandomPokemon(genName: string) {
 				.then(res => res.json())
 				.then(data => {
 					return {
-						name: data.name,
+						name: randomPokemonSpecies.name,
 						spriteUrl: data.sprites.front_default
 					}
 				})

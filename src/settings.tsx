@@ -27,7 +27,7 @@ function GenerationPicker() {
 		})()
 	}, [])
 
-	const rows: JSX.Element[] = generationList.map(gen => <GenerationRow generation={gen} key={gen.id} />)
+	const rows: JSX.Element[] = generationList.map((gen, idx) => <GenerationRow generation={gen} key={gen.name} />)
 
 	return (
 		<>

@@ -14,6 +14,7 @@ type GameState = {
 	pokemon?: PokemonData,
 	choices?: Choices,
 	choice?: string,
+	score?: number,
 }
 
 type GameContext = {
@@ -21,8 +22,8 @@ type GameContext = {
 	generations: string[], // Which generations to pick from. IDs
 	addGeneration: (id: string) => void,
 	removeGeneration: (id: string) => void,
-	resetPokemonAndChoices: (pokemonData: PokemonData) => void,
-	choose: (choice: string) => boolean, // true iff correct
+	resetPokemonAndChoices: () => void,
+	choose: (choice: string) => void,
 }
 
 export const GameContext = createContext({} as GameContext)
@@ -32,9 +33,9 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 
 	const [generations, setGenerations] = useState<string[]>([])
 
-	useEffect(() => {
-		console.log(generations)
-	}, [generations])
+	// useEffect(() => {
+	// 	console.log(generations)
+	// }, [generations])
 
 	useEffect(() => {
 		// Load pokemon and choices
@@ -50,14 +51,15 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 
 		(async () => {
 			if (!gameState.pokemon || !gameState.choices) {
-				resetPokemonAndChoices(await getRandomPokemon(await getRandomGeneration()) as PokemonData)
+				resetPokemonAndChoices()
 			}
 		})()
 
 	}, [])
 
-	async function resetPokemonAndChoices(pokemonData: PokemonData) {
-		setGameState(() => {return {}})
+	async function resetPokemonAndChoices() {
+		setGameState(() => { return {} })
+		const pokemonData: PokemonData = await getRandomPokemon(await getRandomGeneration()) as PokemonData
 		const correctChoiceIndex: number = Number.parseInt((Math.random() * (NUMBER_OF_CHOICES - 1)).toFixed(0))
 		let choices: Choices = [
 			(await getRandomPokemon(await getRandomGeneration()) as PokemonData).name,
@@ -91,11 +93,14 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 
 	function choose(choice: string) {
 		const choiceLowercase: string = choice.toLowerCase()
-		setGameState({
-			...gameState,
-			choice: choiceLowercase
+
+		setGameState((prevState) => {
+			return {
+				...gameState,
+				choice: choiceLowercase,
+				score: (choiceLowercase === gameState.pokemon?.name) ? (prevState.score ?? 0) + 1 : prevState.score,
+			}
 		})
-		return (choiceLowercase === gameState.pokemon?.name)
 	}
 
 	return (

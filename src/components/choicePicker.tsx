@@ -75,10 +75,12 @@ function ChoiceButton({
 	)
 }
 
+const BUTTON_HEIGHT: number = 80
 const styles = StyleSheet.create({
 	choicesContainer: {
 		flexDirection: "row",
-		marginTop: 50,
+		marginTop: 30,
+		marginBottom: 30,
 		flexWrap: "wrap",
 		alignItems: "center",
 	},
@@ -86,12 +88,12 @@ const styles = StyleSheet.create({
 	choiceOverlay: {
 		position: "absolute",
 		left: 0,
-		height: 101,
+		height: BUTTON_HEIGHT + 1,
 	},
 
 	choiceButton: {
 		width: "50%",
-		height: 100,
+		height: BUTTON_HEIGHT,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",

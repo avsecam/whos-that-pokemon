@@ -1,8 +1,8 @@
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { MD3Theme, Surface, useTheme } from "react-native-paper";
+import { Animated, Image, Pressable, StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, MD3Theme, Surface, useTheme } from "react-native-paper";
 import { generationsAreSaved, getRandomGeneration, saveGenerationData } from "./api/generations";
 import { getRandomPokemon, PokemonData } from "./api/pokemon";
 import Choices from "./components/choicePicker";
@@ -19,25 +19,27 @@ export default function Game({
 	const { gameState, resetPokemonAndChoices } = useContext(GameContext)
 	const pokemon = gameState.pokemon
 	const wipeProgress = useRef(new Animated.Value(0.0)).current
-	const [pokemonShown, setPokemonShown] = useState<boolean>(false)
 
-	function togglePokemonVisibility() {
+	function showPokemon() {
 		Animated.timing(wipeProgress, {
-			toValue: (pokemonShown) ? 1.0 : 0.0,
+			toValue: 1.0,
 			duration: 200,
 			useNativeDriver: false,
 		}).start()
 	}
 
 	useEffect(() => {
-		togglePokemonVisibility()
-	}, [pokemonShown])
+		if (gameState.choice) {
+			showPokemon()
+		}
+	}, [gameState.choice])
 
 	return (
 		<>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
 			<View style={styles.container}>
-				{(!gameState.pokemon || !gameState.choices) ? null :
+				{(!gameState.pokemon || !gameState.choices) ?
+					<ActivityIndicator /> :
 					<>
 						<Surface style={styles.pokemonContainer}>
 							<View style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
@@ -46,6 +48,9 @@ export default function Game({
 							</View>
 						</Surface>
 						<Choices />
+						<View>
+							<Text style={[styles.score, { color: theme.colors.primary }]}>Score: {gameState.score ?? 0}</Text>
+						</View>
 					</>
 				}
 			</View>
@@ -67,19 +72,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
-	choicesContainer: {
-		flexDirection: "row",
-		borderWidth: 1,
-		marginTop: 50,
-		flexWrap: "wrap",
-		alignItems: "center"
-	},
-	choiceButton: {
-		borderWidth: 1,
-		height: 50,
-		width: "50%",
-		justifyContent: "center",
-		alignItems: "center",
+	score: {
+		fontSize: 30,
 	}
 })
 
