@@ -6,10 +6,10 @@ export type LinkData = {
 	url: string,
 }
 
-type GenerationData = {
+export type GenerationData = {
 	id: string,
 	name: string,
-	pokemon: LinkData[],
+	pokemonSpecies: LinkData[],
 }
 
 export async function getGenerations() {
@@ -20,6 +20,19 @@ export async function getGenerations() {
 	return generationLinks
 }
 
+export async function generationsAreSaved() {
+	let generationsAreSaved: boolean = true
+	const generations: LinkData[] = await getGenerations()
+	for (var i = 0; i < generations.length; ++i) {
+		if (await AsyncStorage.getItem(generations[i].name) === null) {
+			generationsAreSaved = false
+			break
+		}
+	}
+	return generationsAreSaved
+}
+
+// Save all generations to AsyncStorage
 export async function saveGenerationData() {
 	(await getGenerations()).forEach(async gen => {
 		const generation: GenerationData = await fetch(gen.url)
@@ -28,7 +41,7 @@ export async function saveGenerationData() {
 				const generationData: GenerationData = {
 					id: data.id,
 					name: data.name,
-					pokemon: data.pokemon_species
+					pokemonSpecies: data.pokemon_species
 				}
 				return generationData
 			})

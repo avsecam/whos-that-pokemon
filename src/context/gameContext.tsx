@@ -1,12 +1,16 @@
 import { createContext, useEffect, useState } from "react";
 
-import dewott from "../../dewott.json"
 
 // REMEMBER: After setting generation or when opening app, fetch pokemon list. Maybe save to cache
 
+type PokemonData = {
+	name: string,
+	spriteUrl: string,
+}
+
 type GameState = {
-	pokemon: typeof dewott, // TODO: change this when you are going to use the API
-	choices: [string, string, string, string],
+	pokemon: PokemonData,
+	choices: [string, string, string, string] | [],
 	choice: string,
 }
 
@@ -15,6 +19,7 @@ type GameContext = {
 	generations: string[], // Which generations to pick from. IDs
 	addGeneration: (id: string) => void,
 	removeGeneration: (id: string) => void,
+	setPokemon: (pokemon: PokemonData) => void,
 	choose: (choice: string) => boolean, // true iff correct
 }
 
@@ -22,8 +27,8 @@ export const GameContext = createContext({} as GameContext)
 
 export function GameProvider({ children }: { children: JSX.Element }) {
 	const [gameState, setGameState] = useState<GameState>({
-		pokemon: dewott,
-		choices: ["A", "Dewott", "C", "D"],
+		pokemon: {} as PokemonData,
+		choices: [],
 		choice: ""
 	})
 
