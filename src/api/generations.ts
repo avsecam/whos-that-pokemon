@@ -52,6 +52,15 @@ export async function saveGenerationData() {
 	console.log("Generation Data Saved")
 }
 
+export async function getRandomGeneration() {
+	const generationNamePattern: RegExp = /generation-[a-z]*/;
+	const generationKeys: string[] = (await AsyncStorage.getAllKeys()).filter(key => generationNamePattern.test(key))
+	const randomGenerationKey: number = Number.parseInt((Math.random() * (generationKeys.length - 1)).toFixed(0))
+	const randomGeneration: GenerationData = JSON.parse(await AsyncStorage.getItem(generationKeys[randomGenerationKey]) ?? "{}")
+	
+	return randomGeneration.name
+}
+
 export function formatGenerationName(name: string) {
 	let formattedName: string[] = [...name]
 	formattedName[0] = formattedName[0].toUpperCase()

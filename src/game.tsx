@@ -3,8 +3,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { MD3Theme, Surface, useTheme } from "react-native-paper";
-import { generationsAreSaved, saveGenerationData } from "./api/generations";
-import { getRandomPokemon } from "./api/pokemon";
+import { generationsAreSaved, getRandomGeneration, saveGenerationData } from "./api/generations";
+import { getRandomPokemon, PokemonData } from "./api/pokemon";
 import Choices from "./components/choicePicker";
 import Header from "./components/header";
 import { GameContext } from "./context/gameContext";
@@ -16,7 +16,7 @@ export default function Game({
 	const theme: MD3Theme = useTheme()
 	const imageSize: number = 300
 
-	const { gameState, generations, addGeneration } = useContext(GameContext)
+	const { gameState, resetPokemonAndChoices } = useContext(GameContext)
 	const pokemon = gameState.pokemon
 	const wipeProgress = useRef(new Animated.Value(0.0)).current
 	const [pokemonShown, setPokemonShown] = useState<boolean>(false)
@@ -33,18 +33,21 @@ export default function Game({
 		togglePokemonVisibility()
 	}, [pokemonShown])
 
-
 	return (
 		<>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
 			<View style={styles.container}>
-				<Surface style={styles.pokemonContainer}>
-					<Pressable onPress={() => setPokemonShown(!pokemonShown)} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
-						<Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
-						<Animated.Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
-					</Pressable>
-				</Surface>
-				<Choices />
+				{(!gameState.pokemon || !gameState.choices) ? null :
+					<>
+						<Surface style={styles.pokemonContainer}>
+							<View style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
+								<Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
+								<Animated.Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
+							</View>
+						</Surface>
+						<Choices />
+					</>
+				}
 			</View>
 		</>
 	);
