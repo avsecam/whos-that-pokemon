@@ -49,6 +49,7 @@ export async function saveGenerationData() {
 		// Save to AsyncStorage
 		await AsyncStorage.setItem(gen.name, JSON.stringify(generation))
 	})
+	console.log("Generation Data Saved")
 }
 
 export function formatGenerationName(name: string) {

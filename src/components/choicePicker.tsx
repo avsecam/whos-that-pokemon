@@ -19,7 +19,7 @@ export default function Choices() {
 	}
 
 	function renderChoiceButtons() {
-		return choices.map((choice, idx) => <ChoiceButton showCorrectness={playerHasChosen} text={choice} onPress={() => handlePress(choice)} key={idx} />)
+		return choices?.map((choice, idx) => <ChoiceButton showCorrectness={playerHasChosen} text={choice} onPress={() => handlePress(choice)} key={idx} />)
 	}
 
 	return (
@@ -48,7 +48,7 @@ function ChoiceButton({
 	const wipeDuration: number = 200
 	const wipeProgress = useRef(new Animated.Value(0)).current
 
-	const isCorrect: boolean = (pokemon.name === text?.toLowerCase())
+	const isCorrect: boolean = (pokemon?.name === text?.toLowerCase())
 
 	useEffect(() => {
 		// Animate to wipe green or red

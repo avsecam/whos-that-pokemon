@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { MD3Theme, Surface, useTheme } from "react-native-paper";
 import { generationsAreSaved, saveGenerationData } from "./api/generations";
+import { getRandomPokemon } from "./api/pokemon";
 import Choices from "./components/choicePicker";
 import Header from "./components/header";
 import { GameContext } from "./context/gameContext";
@@ -32,26 +33,15 @@ export default function Game({
 		togglePokemonVisibility()
 	}, [pokemonShown])
 
-	useEffect(() => {
-		// Load pokemon and choices
-		(async () => {
-			if (!await generationsAreSaved()) {
-				saveGenerationData()
-			}
-			if (generations.length <= 0) {
-				addGeneration("generation-i") // TODO: Figure out how to default this
-			}
-		})()
-	}, [])
 
 	return (
 		<>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
 			<View style={styles.container}>
 				<Surface style={styles.pokemonContainer}>
-					<Pressable onPress={() => { setPokemonShown(!pokemonShown) }} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
-						<Image source={{ uri: pokemon.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
-						<Animated.Image source={{ uri: pokemon.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
+					<Pressable onPress={() => setPokemonShown(!pokemonShown)} style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
+						<Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
+						<Animated.Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: wipeProgress }} />
 					</Pressable>
 				</Surface>
 				<Choices />

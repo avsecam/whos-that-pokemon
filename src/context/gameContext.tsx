@@ -1,17 +1,15 @@
 import { createContext, useEffect, useState } from "react";
+import { generationsAreSaved, saveGenerationData } from "../api/generations";
+import { getRandomPokemon, PokemonData } from "../api/pokemon";
 
 
 // REMEMBER: After setting generation or when opening app, fetch pokemon list. Maybe save to cache
 
-type PokemonData = {
-	name: string,
-	spriteUrl: string,
-}
 
 type GameState = {
-	pokemon: PokemonData,
-	choices: [string, string, string, string] | [],
-	choice: string,
+	pokemon?: PokemonData,
+	choices?: [string, string, string, string],
+	choice?: string,
 }
 
 type GameContext = {
@@ -26,17 +24,34 @@ type GameContext = {
 export const GameContext = createContext({} as GameContext)
 
 export function GameProvider({ children }: { children: JSX.Element }) {
-	const [gameState, setGameState] = useState<GameState>({
-		pokemon: {} as PokemonData,
-		choices: [],
-		choice: ""
-	})
+	const [gameState, setGameState] = useState<GameState>({})
 
 	const [generations, setGenerations] = useState<string[]>([])
 
 	useEffect(() => {
 		console.log(generations)
 	}, [generations])
+
+	useEffect(() => {
+		// Load pokemon and choices
+		(async () => {
+			if (!await generationsAreSaved()) {
+				saveGenerationData()
+			}
+		})()
+		
+		if (generations.length <= 0) {
+			addGeneration("generation-i") // TODO: Figure out how to default this
+		}
+
+		if (!gameState.pokemon || !gameState.choices) {
+			getRandomPokemon()
+		}
+	}, [])
+
+	function setPokemon(pokemon: PokemonData) {
+
+	}
 
 	function addGeneration(id: string) { // Add generation if it isn't in the array yet
 		let newGenerations: string[] = []
@@ -59,11 +74,11 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 			...gameState,
 			choice: choiceLowercase
 		})
-		return (choiceLowercase === gameState.pokemon.name)
+		return (choiceLowercase === gameState.pokemon?.name)
 	}
 
 	return (
-		<GameContext.Provider value={{ gameState, generations, addGeneration, removeGeneration, choose }}>
+		<GameContext.Provider value={{ gameState, generations, addGeneration, removeGeneration, setPokemon, choose }}>
 			{children}
 		</GameContext.Provider>
 	)
