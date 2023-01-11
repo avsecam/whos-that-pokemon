@@ -52,6 +52,7 @@ export async function saveGenerationData() {
 	console.log("Generation Data Saved")
 }
 
+// Get any generation from ALL of the generations
 export async function getRandomGeneration() {
 	const generationNamePattern: RegExp = /generation-[a-z]*/;
 	const generationKeys: string[] = (await AsyncStorage.getAllKeys()).filter(key => generationNamePattern.test(key))

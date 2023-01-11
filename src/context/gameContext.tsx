@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { generationsAreSaved, getRandomGeneration, saveGenerationData } from "../api/generations";
 import { getRandomPokemon, PokemonData } from "../api/pokemon";
-import { capitalizeFirstLetter } from "../utils/utils";
+import { capitalizeFirstLetter, getRandomFromArray } from "../utils/utils";
 
 
 // REMEMBER: After setting generation or when opening app, fetch pokemon list. Maybe save to cache
@@ -48,27 +48,34 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		if (generations.length <= 0) {
 			addGeneration("generation-i") // TODO: Figure out how to default this
 		}
+	}, [])
 
-		(async () => {
+	useEffect(() => {
+		if (generations.length > 0) {
 			if (!gameState.pokemon || !gameState.choices) {
 				resetPokemonAndChoices()
 			}
-		})()
-
-	}, [])
+		}
+	}, [generations])
 
 	async function resetPokemonAndChoices() {
+		async function getRandomPokemonFromChosenGenerations() {
+			return await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
+		}
+
 		setGameState(() => { return {} })
-		const pokemonData: PokemonData = await getRandomPokemon(await getRandomGeneration()) as PokemonData
+		const pokemonData: PokemonData = await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		const correctChoiceIndex: number = Number.parseInt((Math.random() * (NUMBER_OF_CHOICES - 1)).toFixed(0))
+
 		let choices: Choices = [
-			(await getRandomPokemon(await getRandomGeneration()) as PokemonData).name,
-			(await getRandomPokemon(await getRandomGeneration()) as PokemonData).name,
-			(await getRandomPokemon(await getRandomGeneration()) as PokemonData).name,
-			(await getRandomPokemon(await getRandomGeneration()) as PokemonData).name,
+			(await getRandomPokemonFromChosenGenerations()).name,
+			(await getRandomPokemonFromChosenGenerations()).name,
+			(await getRandomPokemonFromChosenGenerations()).name,
+			(await getRandomPokemonFromChosenGenerations()).name,
 		]
 		choices[correctChoiceIndex] = pokemonData.name
 		choices = choices.map(choice => capitalizeFirstLetter(choice)) as Choices
+
 		setGameState({
 			pokemon: pokemonData,
 			choices,

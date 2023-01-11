@@ -23,7 +23,7 @@ function Game() {
 	const theme: MD3Theme = useTheme()
 	const imageSize: number = 300
 
-	const { gameState, resetPokemonAndChoices } = useContext(GameContext)
+	const { gameState } = useContext(GameContext)
 	const pokemon = gameState.pokemon
 	const wipeProgress = useRef(new Animated.Value(0.0)).current
 	
