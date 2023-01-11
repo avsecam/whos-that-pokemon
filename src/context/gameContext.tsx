@@ -30,12 +30,7 @@ export const GameContext = createContext({} as GameContext)
 
 export function GameProvider({ children }: { children: JSX.Element }) {
 	const [gameState, setGameState] = useState<GameState>({})
-
 	const [generations, setGenerations] = useState<string[]>([])
-
-	// useEffect(() => {
-	// 	console.log(generations)
-	// }, [generations])
 
 	useEffect(() => {
 		// Load pokemon and choices
@@ -50,7 +45,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		}
 	}, [])
 
-	useEffect(() => {
+	useEffect(() => { // Fetch data for first pokemon question
 		if (generations.length > 0) {
 			if (!gameState.pokemon || !gameState.choices) {
 				resetPokemonAndChoices()
@@ -58,12 +53,20 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		}
 	}, [generations])
 
+	useEffect(() => {
+		if (gameState.choice) {
+			setTimeout(() => {
+				resetPokemonAndChoices()
+			}, 5000)
+		}
+	}, [gameState.choice])
+
 	async function resetPokemonAndChoices() {
 		async function getRandomPokemonFromChosenGenerations() {
 			return await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		}
 
-		setGameState(() => { return {} })
+		setGameState({ score: gameState.score })
 		const pokemonData: PokemonData = await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		const correctChoiceIndex: number = Number.parseInt((Math.random() * (NUMBER_OF_CHOICES - 1)).toFixed(0))
 
@@ -77,8 +80,10 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		choices = choices.map(choice => capitalizeFirstLetter(choice)) as Choices
 
 		setGameState({
+			...gameState,
 			pokemon: pokemonData,
 			choices,
+			choice: undefined,
 		})
 	}
 

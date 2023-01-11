@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
 	choicesContainer: {
 		flexDirection: "row",
 		marginTop: 30,
-		marginBottom: 30,
 		flexWrap: "wrap",
 		alignItems: "center",
 	},
