@@ -57,7 +57,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		if (gameState.choice) {
 			setTimeout(() => {
 				resetPokemonAndChoices()
-			}, 5000)
+			}, 3000)
 		}
 	}, [gameState.choice])
 
@@ -70,13 +70,27 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		const pokemonData: PokemonData = await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		const correctChoiceIndex: number = Number.parseInt((Math.random() * (NUMBER_OF_CHOICES - 1)).toFixed(0))
 
+		const test = (await getRandomPokemonFromChosenGenerations()).name
+
 		let choices: Choices = [
 			(await getRandomPokemonFromChosenGenerations()).name,
 			(await getRandomPokemonFromChosenGenerations()).name,
-			(await getRandomPokemonFromChosenGenerations()).name,
-			(await getRandomPokemonFromChosenGenerations()).name,
+			test, test
+			// (await getRandomPokemonFromChosenGenerations()).name,
+			// (await getRandomPokemonFromChosenGenerations()).name,
 		]
 		choices[correctChoiceIndex] = pokemonData.name
+
+		let choicesUnique: Set<string> = new Set(choices)
+		if (choicesUnique.size !== NUMBER_OF_CHOICES) {
+			while (choicesUnique.size !== NUMBER_OF_CHOICES) {
+				choicesUnique.add((await getRandomPokemonFromChosenGenerations()).name)
+			}
+
+			const choicesUniqueArray: Array<string> = Array.from(choicesUnique)
+			choices = choicesUniqueArray.map(choice => choice) as Choices
+		}
+
 		choices = choices.map(choice => capitalizeFirstLetter(choice)) as Choices
 
 		setGameState({
