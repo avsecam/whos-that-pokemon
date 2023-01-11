@@ -4,6 +4,8 @@ import { MD3Theme, useTheme } from "react-native-paper"
 import { GameContext } from "../context/gameContext"
 import { useContext } from "react"
 
+export const HEADER_HEIGHT: number = 70
+
 export default function Header({
 	title = "Who's That Pokemon?",
 	showButton = false,
@@ -35,7 +37,7 @@ export default function Header({
 const styles = StyleSheet.create({
 	header: {
 		width: "100%",
-		height: 70,
+		height: HEADER_HEIGHT,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",

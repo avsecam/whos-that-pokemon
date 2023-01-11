@@ -1,10 +1,10 @@
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useContext, useEffect, useRef } from "react";
-import { Animated, Image, StyleSheet, Text, View } from "react-native";
+import { Animated, Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { ActivityIndicator, MD3Theme, Surface, useTheme } from "react-native-paper";
 import Choices from "./components/choicePicker";
-import Header from "./components/header";
+import Header, { HEADER_HEIGHT } from "./components/header";
 import { GameContext } from "./context/gameContext";
 
 export default function GameContainer({
@@ -15,18 +15,18 @@ export default function GameContainer({
 	const { gameState } = useContext(GameContext)
 
 	return (
-		<>
+		<View style={{ height: "100%" }}>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
-			<View style={{ height: "100%", alignItems: "center", justifyContent: "space-around" }}>
+			<View style={{ alignItems: "center", justifyContent: "space-around" }}>
 				{(!gameState.pokemon || !gameState.choices) ?
-					<ActivityIndicator size={80} style={{ width: "100%" }} /> :
+					<ActivityIndicator size={80} style={{ height: "70%", width: "100%", alignSelf: "center" }} /> :
 					<Game />
 				}
-				<View>
-					<Text style={[styles.score, { color: theme.colors.primary }]}>Score: {gameState.score ?? 0}</Text>
-				</View>
 			</View>
-		</>
+			<View style={{ position: "absolute", bottom: 0, padding: 40, alignSelf: "center" }}>
+				<Text style={[styles.score, { color: theme.colors.primary }]}>Score: {gameState.score ?? 0}</Text>
+			</View>
+		</View>
 	);
 }
 
@@ -51,7 +51,6 @@ function Game() {
 			showPokemon()
 		} else {
 			fadeProgress.setValue(0.0)
-			console.log(fadeProgress)
 		}
 	}, [gameState.choice])
 
@@ -72,6 +71,7 @@ function Game() {
 
 const styles = StyleSheet.create({
 	container: {
+		marginVertical: 40,
 		alignItems: "center",
 	},
 
