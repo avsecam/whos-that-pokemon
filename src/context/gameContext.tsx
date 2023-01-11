@@ -51,6 +51,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 				resetPokemonAndChoices()
 			}
 		}
+		console.log(generations)
 	}, [generations])
 
 	useEffect(() => {
@@ -114,7 +115,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 
 	function removeGeneration(id: string) {
 		if (generations === undefined) return
-		setGenerations(generations.filter(val => val === id))
+		setGenerations(generations.filter(val => val !== id))
 	}
 
 	function choose(choice: string) {

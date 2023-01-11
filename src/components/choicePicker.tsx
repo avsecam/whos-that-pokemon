@@ -45,7 +45,7 @@ function ChoiceButton({
 	const colorRight: string = "limegreen"
 	const colorWrong: string = "red"
 
-	const wipeDuration: number = 200
+	const wipeDuration: number = 300
 	const wipeProgress = useRef(new Animated.Value(0)).current
 
 	const isCorrect: boolean = (pokemon?.name === text?.toLowerCase())

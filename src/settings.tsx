@@ -1,7 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage/"
 import { useContext, useEffect, useState } from "react"
-import { GestureResponderEvent, Text, View } from "react-native"
-import { Button, Checkbox, List } from "react-native-paper"
+import { View } from "react-native"
+import { Checkbox, List } from "react-native-paper"
 import { formatGenerationName, getGenerations, LinkData } from "./api/generations"
 import Header from "./components/header"
 import { GameContext } from "./context/gameContext"
@@ -27,7 +26,7 @@ function GenerationPicker() {
 		})()
 	}, [])
 
-	const rows: JSX.Element[] = generationList.map((gen, idx) => <GenerationRow generation={gen} key={gen.name} />)
+	const rows: JSX.Element[] = generationList.map(gen => <GenerationRow generation={gen} key={gen.name} />)
 
 	return (
 		<>
@@ -47,7 +46,6 @@ function GenerationRow({
 	const [checked, setChecked] = useState<boolean>(generations.find(gen => gen === generation.name) ? true : false)
 
 	function handlePress() {
-		console.log(generation)
 		if (checked) removeGeneration(generation.name)
 		else addGeneration(generation.name)
 		setChecked(!checked)
