@@ -46,7 +46,10 @@ export async function getRandomPokemon(genName: string) {
 						spriteUrl: data.sprites.front_default
 					}
 				})
-			return randomPokemon
+			return {
+				name: randomPokemonSpecies.name,
+				spriteUrl: randomPokemon.spriteUrl,
+			} as PokemonData
 		}
 	} catch(e) {
 		console.error(e)

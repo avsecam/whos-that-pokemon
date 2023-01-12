@@ -58,7 +58,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		if (gameState.choice) {
 			setTimeout(() => {
 				resetPokemonAndChoices()
-			}, 3000)
+			}, 1000)
 		}
 	}, [gameState.choice])
 
@@ -76,9 +76,8 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		let choices: Choices = [
 			(await getRandomPokemonFromChosenGenerations()).name,
 			(await getRandomPokemonFromChosenGenerations()).name,
-			test, test
-			// (await getRandomPokemonFromChosenGenerations()).name,
-			// (await getRandomPokemonFromChosenGenerations()).name,
+			(await getRandomPokemonFromChosenGenerations()).name,
+			(await getRandomPokemonFromChosenGenerations()).name,
 		]
 		choices[correctChoiceIndex] = pokemonData.name
 
