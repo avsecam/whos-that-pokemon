@@ -58,11 +58,26 @@ export async function getRandomPokemon(genName: string) {
 }
 
 export function convertToReadable(pokemonName: string) {
-	let readable: string = pokemonName
-	switch (readable.toLowerCase()) {
-		case "mr-mime":
-			readable = "mr. mime"
-			break
-	}
-	return capitalizeFirstLetter(readable)
+	const specialNames: [string, string][] = [
+		// [API name, Formatted name]
+		["ho-oh", "Ho-Oh"],
+		["mime-jr", "Mime Jr."],
+		["mr-mime", "Mr. Mime"],
+		["mr-rime", "Mr. Rime"],
+		["nidoran-f", "Nidoran-F"],
+		["nidoran-m", "Nidoran-M"],
+		["porygon-z", "Porygon-Z"],
+		["type-null", "Type: Null"],
+		["tapu-koko", "Tapu Koko"],
+		["tapu-lele", "Tapu Lele"],
+		["tapu-bulu", "Tapu Bulu"],
+		["tapu-fini", "Tapu Fini"],
+	]
+
+	let readableName: string = pokemonName
+
+	const specialName: [string, string] | undefined = specialNames.find(tuple => tuple[0] === readableName)
+	if (specialName) readableName = specialName[1]
+	
+	return capitalizeFirstLetter(readableName)
 }
