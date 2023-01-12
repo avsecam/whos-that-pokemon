@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { generationsAreSaved, getRandomGeneration, saveGenerationData } from "../api/generations";
-import { getRandomPokemon, PokemonData } from "../api/pokemon";
-import { capitalizeFirstLetter, getRandomFromArray } from "../utils/utils";
+import { generationsAreSaved, saveGenerationData } from "../api/generations";
+import { convertToReadable, getRandomPokemon, PokemonData } from "../api/pokemon";
+import { getRandomFromArray } from "../utils/utils";
 
 
 // REMEMBER: After setting generation or when opening app, fetch pokemon list. Maybe save to cache
@@ -91,7 +91,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 			choices = choicesUniqueArray.map(choice => choice) as Choices
 		}
 
-		choices = choices.map(choice => capitalizeFirstLetter(choice)) as Choices
+		choices = choices.map(choice => convertToReadable(choice)) as Choices
 
 		setGameState({
 			...gameState,

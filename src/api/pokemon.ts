@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { capitalizeFirstLetter } from "../utils/utils";
 import { GenerationData, LinkData } from "./generations";
 
 
@@ -54,4 +55,14 @@ export async function getRandomPokemon(genName: string) {
 	} catch(e) {
 		console.error(e)
 	}
+}
+
+export function convertToReadable(pokemonName: string) {
+	let readable: string = pokemonName
+	switch (readable.toLowerCase()) {
+		case "mr-mime":
+			readable = "mr. mime"
+			break
+	}
+	return capitalizeFirstLetter(readable)
 }
