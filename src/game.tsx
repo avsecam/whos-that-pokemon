@@ -5,26 +5,20 @@ import { Animated, Dimensions, Image, StyleSheet, Text, View } from "react-nativ
 import { ActivityIndicator, MD3Theme, Surface, useTheme } from "react-native-paper";
 import Choices from "./components/choicePicker";
 import Header, { HEADER_HEIGHT } from "./components/header";
+import PlayerStats from "./components/playerStats";
 import { GameContext } from "./context/gameContext";
 
 export default function GameContainer({
 	navigation
 }: NativeStackScreenProps<ParamListBase>
 ) {
-	const theme: MD3Theme = useTheme()
 	const { gameState } = useContext(GameContext)
 
 	return (
 		<View style={{ height: "100%" }}>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
 			<View style={{ alignItems: "center", justifyContent: "space-around" }}>
-				{(!gameState.pokemon || !gameState.choices) ?
-					<ActivityIndicator size={80} style={{ height: "70%", width: "100%", alignSelf: "center" }} /> :
-					<Game />
-				}
-			</View>
-			<View style={{ position: "absolute", bottom: 0, padding: 40, alignSelf: "center" }}>
-				<Text style={[styles.score, { color: theme.colors.primary }]}>Score: {gameState.score ?? 0}</Text>
+				<Game />
 			</View>
 		</View>
 	);
@@ -57,33 +51,37 @@ function Game() {
 	return (
 		<>
 			<View style={styles.container}>
-				<Surface style={styles.pokemonContainer}>
-					<View style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
-						<Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
-						<Animated.Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: fadeProgress }} />
-					</View>
-				</Surface>
-				<Choices />
+				{(!gameState.pokemon || !gameState.choices) ?
+					<ActivityIndicator size={80} style={{ height: "100%", width: "100%", alignSelf: "center" }} /> :
+					<>
+						<Surface style={styles.pokemonContainer}>
+							<View style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
+								<Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
+								<Animated.Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: fadeProgress }} />
+							</View>
+						</Surface>
+						<Choices />
+					</>
+				}
 			</View>
+			<PlayerStats />
 		</>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
-		marginVertical: 40,
+		height: "100%",
 		alignItems: "center",
+		justifyContent: "space-evenly"
 	},
 
 	pokemonContainer: {
 		width: "80%",
 		aspectRatio: 1,
+		marginTop: HEADER_HEIGHT,
 		justifyContent: "center",
 		alignItems: "center",
 	},
-
-	score: {
-		fontSize: 30,
-	}
 })
 

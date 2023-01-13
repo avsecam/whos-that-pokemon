@@ -79,7 +79,6 @@ const BUTTON_HEIGHT: number = 80
 const styles = StyleSheet.create({
 	choicesContainer: {
 		flexDirection: "row",
-		marginTop: 30,
 		flexWrap: "wrap",
 		alignItems: "center",
 	},

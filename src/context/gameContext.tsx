@@ -7,6 +7,7 @@ import { getRandomFromArray } from "../utils/utils";
 // REMEMBER: After setting generation or when opening app, fetch pokemon list. Maybe save to cache
 
 const NUMBER_OF_CHOICES: number = 4
+export const MAX_LIVES: number = 3
 
 type Choices = [string, string, string, string]
 
@@ -15,6 +16,7 @@ type GameState = {
 	choices?: Choices,
 	choice?: string,
 	score?: number,
+	lives?: number, // TODO: Add functionality
 }
 
 type GameContext = {
@@ -24,12 +26,13 @@ type GameContext = {
 	removeGeneration: (id: string) => void,
 	resetPokemonAndChoices: () => void,
 	choose: (choice: string) => void,
+	isGameOver: () => boolean,
 }
 
 export const GameContext = createContext({} as GameContext)
 
 export function GameProvider({ children }: { children: JSX.Element }) {
-	const [gameState, setGameState] = useState<GameState>({})
+	const [gameState, setGameState] = useState<GameState>({ lives: 3 })
 	const [generations, setGenerations] = useState<string[]>([])
 
 	useEffect(() => {
@@ -67,11 +70,9 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 			return await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		}
 
-		setGameState({ score: gameState.score })
+		setGameState({ score: gameState.score, lives: gameState.lives })
 		const pokemonData: PokemonData = await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		const correctChoiceIndex: number = Number.parseInt((Math.random() * (NUMBER_OF_CHOICES - 1)).toFixed(0))
-
-		const test = (await getRandomPokemonFromChosenGenerations()).name
 
 		let choices: Choices = [
 			(await getRandomPokemonFromChosenGenerations()).name,
@@ -119,18 +120,32 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 
 	function choose(choice: string) {
 		const choiceLowercase: string = choice.toLowerCase()
+		const isCorrect: boolean = (choiceLowercase === gameState.pokemon?.name)
 
 		setGameState((prevState) => {
 			return {
 				...gameState,
 				choice: choiceLowercase,
-				score: (choiceLowercase === gameState.pokemon?.name) ? (prevState.score ?? 0) + 1 : prevState.score,
+				score: isCorrect ? (prevState.score ?? 0) + 1 : prevState.score,
+				lives: isCorrect ? gameState.lives : (gameState.lives ?? 0) - 1
 			}
 		})
 	}
 
+	function isGameOver() {
+		return (gameState.lives ?? 0) <= 0
+	}
+
 	return (
-		<GameContext.Provider value={{ gameState, generations, addGeneration, removeGeneration, resetPokemonAndChoices, choose }}>
+		<GameContext.Provider value={{
+			gameState,
+			generations,
+			addGeneration,
+			removeGeneration,
+			resetPokemonAndChoices,
+			choose,
+			isGameOver,
+		}}>
 			{children}
 		</GameContext.Provider>
 	)

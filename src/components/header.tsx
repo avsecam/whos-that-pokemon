@@ -36,12 +36,14 @@ export default function Header({
 
 const styles = StyleSheet.create({
 	header: {
+		position: "absolute",
 		width: "100%",
 		height: HEADER_HEIGHT,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
-		paddingHorizontal: 20
+		paddingHorizontal: 20,
+		zIndex: 10,
 	},
 
 	button: {
