@@ -1,8 +1,6 @@
 import MaterialIcon from "react-native-vector-icons/MaterialIcons"
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
-import { MD3Theme, useTheme } from "react-native-paper"
-import { GameContext } from "../context/gameContext"
-import { useContext } from "react"
+import { View, TouchableOpacity, StyleSheet } from "react-native"
+import { MD3Theme, useTheme, Text } from "react-native-paper"
 
 export const HEADER_HEIGHT: number = 70
 
@@ -16,14 +14,11 @@ export default function Header({
 	onButtonPress?: () => void,
 }) {
 	const theme: MD3Theme = useTheme()
-	const { resetPokemonAndChoices } = useContext(GameContext)
 
 	return (
 		<>
 			<View style={[styles.header, { backgroundColor: theme.colors.secondary }]}>
-				<TouchableOpacity onPress={resetPokemonAndChoices}>
-					<Text style={{ fontSize: 25 }}>{title}</Text>
-				</TouchableOpacity>
+				<Text style={{ fontSize: 25 }}>{title}</Text>
 				{showButton ?
 					<TouchableOpacity style={styles.button} onPress={onButtonPress}>
 						<MaterialIcon name="settings" size={30} />

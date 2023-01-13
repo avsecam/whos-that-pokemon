@@ -1,12 +1,14 @@
 import { ParamListBase } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useContext, useEffect, useRef } from "react";
-import { Animated, Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { Animated, Image, StyleSheet, View } from "react-native";
 import { ActivityIndicator, MD3Theme, Surface, useTheme } from "react-native-paper";
 import Choices from "./components/choicePicker";
 import Header, { HEADER_HEIGHT } from "./components/header";
 import PlayerStats from "./components/playerStats";
 import { GameContext } from "./context/gameContext";
+
+export const IMAGE_SIZE: number = 300
 
 export default function GameContainer({
 	navigation
@@ -26,7 +28,6 @@ export default function GameContainer({
 
 function Game() {
 	const theme: MD3Theme = useTheme()
-	const imageSize: number = 300
 
 	const { gameState } = useContext(GameContext)
 	const pokemon = gameState.pokemon
@@ -56,8 +57,8 @@ function Game() {
 					<>
 						<Surface style={styles.pokemonContainer}>
 							<View style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
-								<Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
-								<Animated.Image source={{ uri: pokemon?.spriteUrl, height: imageSize, width: imageSize }} style={{ opacity: fadeProgress }} />
+								<Image source={{ uri: pokemon?.spriteUrl, height: IMAGE_SIZE, width: IMAGE_SIZE }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
+								<Animated.Image source={{ uri: pokemon?.spriteUrl, height: IMAGE_SIZE, width: IMAGE_SIZE }} style={{ opacity: fadeProgress }} />
 							</View>
 						</Surface>
 						<Choices />

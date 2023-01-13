@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { View, Pressable, Text, StyleSheet, Animated, Dimensions, Easing } from "react-native";
-import { IconButton, MD3Theme, useTheme } from "react-native-paper";
+import { View, Pressable, StyleSheet, Animated, Dimensions, Easing } from "react-native";
+import { Text, MD3Theme, useTheme } from "react-native-paper";
 import { GameContext } from "../context/gameContext";
 
 

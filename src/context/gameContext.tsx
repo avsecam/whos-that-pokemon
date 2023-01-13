@@ -65,26 +65,22 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 	}, [gameState.choice])
 
 	async function resetPokemonAndChoices() {
-		async function getRandomPokemonFromChosenGenerations() {
-			return await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
-		}
-
 		setGameState({ score: gameState.score, lives: gameState.lives })
 		const pokemonData: PokemonData = await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData
 		const correctChoiceIndex: number = Number.parseInt((Math.random() * (NUMBER_OF_CHOICES - 1)).toFixed(0))
 
 		let choices: Choices = [
-			(await getRandomPokemonFromChosenGenerations()).name,
-			(await getRandomPokemonFromChosenGenerations()).name,
-			(await getRandomPokemonFromChosenGenerations()).name,
-			(await getRandomPokemonFromChosenGenerations()).name,
+			(await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).name,
+			(await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).name,
+			(await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).name,
+			(await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).name,
 		]
 		choices[correctChoiceIndex] = pokemonData.name
 
 		let choicesUnique: Set<string> = new Set(choices)
 		if (choicesUnique.size !== NUMBER_OF_CHOICES) {
 			while (choicesUnique.size !== NUMBER_OF_CHOICES) {
-				choicesUnique.add((await getRandomPokemonFromChosenGenerations()).name)
+				choicesUnique.add((await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).name)
 			}
 
 			const choicesUniqueArray: Array<string> = Array.from(choicesUnique)

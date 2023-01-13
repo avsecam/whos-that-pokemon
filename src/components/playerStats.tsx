@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { MD3Theme, useTheme } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { MD3Theme, useTheme, Text } from "react-native-paper";
 import { GameContext, MAX_LIVES } from "../context/gameContext";
 import { HEADER_HEIGHT } from "./header";
 
