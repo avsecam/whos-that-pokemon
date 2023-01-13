@@ -36,7 +36,7 @@ export default function PlayerStats() {
 		<View style={styles.container}>
 			<View style={styles.lives}>
 				{Array(MAX_LIVES).fill("").map((_, idx) =>
-					<View style={[styles.life, {backgroundColor: (idx < (gameState.lives ?? 0)) ? "red" : "gray"}]}></View>
+					<View style={[styles.life, {backgroundColor: (idx < (gameState.lives ?? 0)) ? "red" : "gray"}]} key={idx}></View>
 				)}
 			</View>
 			<Text style={[styles.score, { color: theme.colors.primary }]}>Score: {gameState.score ?? 0}</Text>

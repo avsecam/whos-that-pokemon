@@ -22,8 +22,7 @@ type GameState = {
 type GameContext = {
 	gameState: GameState,
 	generations: string[], // Which generations to pick from. IDs
-	addGeneration: (id: string) => void,
-	removeGeneration: (id: string) => void,
+	toggleGeneration: (id: string) => void,
 	resetPokemonAndChoices: () => void,
 	choose: (choice: string) => void,
 	isGameOver: () => boolean,
@@ -44,7 +43,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		})()
 
 		if (generations.length <= 0) {
-			addGeneration("generation-i") // TODO: Figure out how to default this
+			toggleGeneration("generation-i") // TODO: Figure out how to default this
 		}
 	}, [])
 
@@ -102,20 +101,20 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		})
 	}
 
-	// Add generation if it isn't in the array yet
-	function addGeneration(id: string) {
-		let newGenerations: string[] = []
-		if (generations !== undefined) {
-			newGenerations = (generations.find(val => val === id)) ? generations : [...generations, id]
-		} else {
-			newGenerations = [id]
+	// Add / remove generation
+	function toggleGeneration(id: string) {
+		if (!generations) {
+			setGenerations([id])
+			return
 		}
-		setGenerations(newGenerations)
-	}
 
-	function removeGeneration(id: string) {
-		if (generations === undefined) return
-		setGenerations(generations.filter(val => val !== id))
+		let newGenerations: string[] = []
+		const existingGeneration: string | undefined = generations.find(val => val === id)
+
+		// If it exists, filter it out. Else, add it
+		newGenerations = (existingGeneration) ? generations.filter(val => val !== id) : [...generations, id]
+
+		setGenerations(newGenerations)
 	}
 
 	function choose(choice: string) {
@@ -140,8 +139,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		<GameContext.Provider value={{
 			gameState,
 			generations,
-			addGeneration,
-			removeGeneration,
+			toggleGeneration,
 			resetPokemonAndChoices,
 			choose,
 			isGameOver,
