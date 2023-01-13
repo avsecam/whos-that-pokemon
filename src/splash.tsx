@@ -7,10 +7,15 @@ import { getRandomPokemon, PokemonData } from "./api/pokemon";
 import { getRandomFromArray } from "./utils/utils";
 import { IMAGE_SIZE } from "./game";
 import { formatGenerationName } from "./api/generations";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ParamListBase } from "@react-navigation/native";
 
 const CHANGE_TIMER: number = 300
 
-export default function SplashScreen() {
+export default function SplashScreen({
+	navigation
+}: NativeStackScreenProps<ParamListBase>
+) {
 	const theme: MD3Theme = useTheme()
 	const styles = StyleSheet.create({
 		container: {
@@ -47,7 +52,7 @@ export default function SplashScreen() {
 	const { generations } = useContext(GameContext)
 
 	const [spriteUrls, setSpriteUrls] = useState<string[]>(Array(50).fill(""))
-	useEffect(() => {
+	useEffect(() => { // Get random pokemon when generation list changes
 		(() => {
 			(async () => {
 				if (generations.length > 0) {
@@ -58,7 +63,7 @@ export default function SplashScreen() {
 	}, [generations])
 
 	const [sprite, setSprite] = useState<string>(getRandomFromArray<string>(spriteUrls))
-	useEffect(() => {
+	useEffect(() => { // Change pokemon displayed on interval
 		function changePokemon() {
 			setSprite(() => getRandomFromArray<string>(spriteUrls, sprite))
 		}
@@ -79,7 +84,7 @@ export default function SplashScreen() {
 				}
 			</View>
 			<Text variant="displayLarge" style={styles.title}>{App.displayName}</Text>
-			<TouchableOpacity style={styles.start}>
+			<TouchableOpacity onPress={() => navigation.replace("Game")} style={styles.start}>
 				<Text style={styles.startText}>Start</Text>
 			</TouchableOpacity>
 			<Text variant="bodyLarge">Generations: {generations.map((gen, idx) => {

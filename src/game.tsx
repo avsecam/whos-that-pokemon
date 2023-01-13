@@ -14,7 +14,6 @@ export default function GameContainer({
 	navigation
 }: NativeStackScreenProps<ParamListBase>
 ) {
-	const { gameState } = useContext(GameContext)
 
 	return (
 		<View style={{ height: "100%" }}>
