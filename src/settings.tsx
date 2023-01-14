@@ -42,9 +42,10 @@ function GenerationRow({
 }: {
 	generation: LinkData
 }) {
+	
 	const { generations, toggleGeneration } = useContext(GameContext)
 	const [checked, setChecked] = useState<boolean>(generations.find(gen => gen === generation.name) ? true : false)
-
+	
 	function handlePress() {
 		if (generations.length === 1 && checked) {
 			Alert.alert("", "Please add at least one generation.")
@@ -53,6 +54,8 @@ function GenerationRow({
 		toggleGeneration(generation.name)
 		setChecked(!checked)
 	}
-
-	return <Checkbox.Item label={formatGenerationName(generation.name)} onPress={handlePress} status={checked ? "checked" : "unchecked"} />
+	
+	return <Checkbox.Item label={formatGenerationName(generation.name)} onPress={handlePress} status={checked ? "checked" : "unchecked"} disabled={
+		(generation.name === "generation-ix") ? true : false // REMEMBER: Remove this when Generation 9 has sprites
+	}/>
 }

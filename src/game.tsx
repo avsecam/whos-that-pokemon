@@ -15,6 +15,16 @@ export default function GameContainer({
 }: NativeStackScreenProps<ParamListBase>
 ) {
 
+	const { generations, gameState, resetPokemonAndChoices } = useContext(GameContext)
+
+	useEffect(() => { // Fetch data for first pokemon question
+		if (generations.length > 0) {
+			if (!gameState.pokemon || !gameState.choices) {
+				resetPokemonAndChoices()
+			}
+		}
+	}, [])
+
 	return (
 		<View style={{ height: "100%" }}>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />

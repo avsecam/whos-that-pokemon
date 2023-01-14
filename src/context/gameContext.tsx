@@ -53,7 +53,6 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 				resetPokemonAndChoices()
 			}
 		}
-		console.log(generations)
 	}, [generations])
 
 	useEffect(() => {
