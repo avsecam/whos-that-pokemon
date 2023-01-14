@@ -37,7 +37,28 @@ export default function GameContainer({
 
 function Game() {
 	const theme: MD3Theme = useTheme()
-
+	const styles = StyleSheet.create({
+		container: {
+			height: "100%",
+			alignItems: "center",
+			justifyContent: "space-evenly",
+		},
+	
+		pokemonContainer: {
+			width: "80%",
+			aspectRatio: 1,
+			marginTop: HEADER_HEIGHT,
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: theme.colors.secondaryContainer,
+			borderRadius: 10,
+		},
+		silhouette: {
+			position: "absolute",
+			tintColor: theme.colors.primaryContainer
+		}
+	})
+		
 	const { gameState } = useContext(GameContext)
 	const pokemon = gameState.pokemon
 	const fadeProgress = useRef(new Animated.Value(0.0)).current
@@ -66,7 +87,7 @@ function Game() {
 					<>
 						<Surface style={styles.pokemonContainer}>
 							<View style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>
-								<Image source={{ uri: pokemon?.spriteUrl, height: IMAGE_SIZE, width: IMAGE_SIZE }} style={{ position: "absolute", tintColor: theme.colors.primary }} />
+								<Image source={{ uri: pokemon?.spriteUrl, height: IMAGE_SIZE, width: IMAGE_SIZE }} style={styles.silhouette} />
 								<Animated.Image source={{ uri: pokemon?.spriteUrl, height: IMAGE_SIZE, width: IMAGE_SIZE }} style={{ opacity: fadeProgress }} />
 							</View>
 						</Surface>
@@ -78,20 +99,3 @@ function Game() {
 		</>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		height: "100%",
-		alignItems: "center",
-		justifyContent: "space-evenly"
-	},
-
-	pokemonContainer: {
-		width: "80%",
-		aspectRatio: 1,
-		marginTop: HEADER_HEIGHT,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-})
-

@@ -10,7 +10,7 @@ import { formatGenerationName } from "./api/generations";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
 
-const CHANGE_TIMER: number = 300
+const CHANGE_TIMER: number = 3000
 
 export default function SplashScreen({
 	navigation
@@ -21,7 +21,7 @@ export default function SplashScreen({
 		container: {
 			width: "100%",
 			height: "100%",
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.primaryContainer,
 			alignItems: "center",
 		},
 		pokemon: {
@@ -40,7 +40,7 @@ export default function SplashScreen({
 			marginTop: 20,
 			padding: 20,
 			justifyContent: "center",
-			backgroundColor: theme.colors.primaryContainer
+			backgroundColor: theme.colors.primary
 		},
 		startText: {
 			fontSize: theme.fonts.headlineLarge.fontSize,
@@ -52,13 +52,12 @@ export default function SplashScreen({
 			position: "absolute",
 			maxWidth: "90%",
 			bottom: 20,
-			backgroundColor: theme.colors.inversePrimary,
+			backgroundColor: theme.colors.primary,
 			borderRadius: 5,
 		},
 		settingsText: {
 			textAlign: "center",
 			textAlignVertical: "center",
-			height: 90,
 		}
 	})
 

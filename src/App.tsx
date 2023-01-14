@@ -8,7 +8,19 @@ import { Settings } from './settings';
 import SplashScreen from './splash';
 
 const PaperTheme: ThemeProp = {
-	...DefaultTheme
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		primary: "#e00909",
+		primaryContainer: "#cc0000",
+		secondary: "#3b4cca",
+		secondaryContainer: "#b0c9ff",
+		onSecondary: "#cce6e9",
+		tertiary: "#ffde00",
+		tertiaryContainer: "#b3a125",
+		background: "#eeeeee",
+		onBackground: "#333333",
+	}
 }
 
 const Stack = createNativeStackNavigator()

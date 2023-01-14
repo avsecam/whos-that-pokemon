@@ -9,7 +9,11 @@ export default function PlayerStats() {
 	const styles = StyleSheet.create({
 		container: {
 			flexDirection: "row",
-			marginBottom: HEADER_HEIGHT / 2,
+			paddingVertical: HEADER_HEIGHT / 4,
+			margin: HEADER_HEIGHT / 4,
+			borderColor: theme.colors.tertiary,
+			borderWidth: 4,
+			borderRadius: 10,
 		},
 		lives: {
 			flexDirection: "row",
@@ -23,10 +27,17 @@ export default function PlayerStats() {
 			borderRadius: 999,
 			marginHorizontal: 5,
 		},
+		filled: {
+			backgroundColor: theme.colors.primary
+		},
+		empty: {
+			backgroundColor: theme.colors.onBackground
+		},
 		score: {
 			fontSize: 30,
 			flex: 1,
-			textAlign: "center"
+			textAlign: "center",
+			color: theme.colors.onBackground
 		}
 	})
 
@@ -36,10 +47,10 @@ export default function PlayerStats() {
 		<View style={styles.container}>
 			<View style={styles.lives}>
 				{Array(MAX_LIVES).fill("").map((_, idx) =>
-					<View style={[styles.life, {backgroundColor: (idx < (gameState.lives ?? 0)) ? "red" : "gray"}]} key={idx}></View>
+					<View style={[styles.life, (idx < (gameState.lives ?? 0)) ? styles.filled : styles.empty ]} key={idx}></View>
 				)}
 			</View>
-			<Text style={[styles.score, { color: theme.colors.primary }]}>Score: {gameState.score ?? 0}</Text>
+			<Text style={styles.score}>Score: {gameState.score ?? 0}</Text>
 		</View>
 	)
 }

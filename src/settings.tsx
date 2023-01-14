@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { Alert, View } from "react-native"
-import { Checkbox, List } from "react-native-paper"
+import { Checkbox, List, Switch } from "react-native-paper"
 import { formatGenerationName, getGenerations, LinkData } from "./api/generations"
 import Header, { HEADER_HEIGHT } from "./components/header"
 import { GameContext } from "./context/gameContext"
@@ -11,7 +11,7 @@ export function Settings() {
 			<Header title="Settings" />
 			<View style={{ paddingTop: HEADER_HEIGHT }}>
 				<GenerationPicker />
-				<List.Item title="Theme" />
+				<List.Item title="Dark Theme" right={ThemeSwitch}/>
 			</View>
 		</>
 	)
@@ -58,4 +58,12 @@ function GenerationRow({
 	return <Checkbox.Item label={formatGenerationName(generation.name)} onPress={handlePress} status={checked ? "checked" : "unchecked"} disabled={
 		(generation.name === "generation-ix") ? true : false // REMEMBER: Remove this when Generation 9 has sprites
 	}/>
+}
+
+function ThemeSwitch() {
+	const [on, setOn] = useState<boolean>(false)
+
+	return (
+		<Switch onValueChange={() => setOn(!on)} value={on ? true : false} />
+	)
 }

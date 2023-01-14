@@ -69,7 +69,7 @@ function ChoiceButton({
 		<>
 			<Pressable onPress={onPress} style={styles.choiceButton}>
 				<Animated.View style={[styles.choiceOverlay, { backgroundColor: (isCorrect) ? colorRight : colorWrong, width: wipeProgress }]} />
-				<Text style={{ color: theme.colors.primary, fontSize: theme.fonts.headlineMedium.fontSize }}>{text ? text : null}</Text>
+				<Text style={{ color: theme.colors.onBackground, fontSize: theme.fonts.headlineMedium.fontSize }}>{text ? text : null}</Text>
 			</Pressable>
 		</>
 	)
