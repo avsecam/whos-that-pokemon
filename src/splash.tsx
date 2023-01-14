@@ -23,10 +23,9 @@ export default function SplashScreen({
 			height: "100%",
 			backgroundColor: theme.colors.primary,
 			alignItems: "center",
-			justifyContent: "space-around",
 		},
 		pokemon: {
-			height: 200,
+			height: "47%",
 			justifyContent: "center"
 		},
 		pokeball: {
@@ -38,6 +37,7 @@ export default function SplashScreen({
 		},
 		start: {
 			borderRadius: 5,
+			marginTop: 20,
 			padding: 20,
 			justifyContent: "center",
 			backgroundColor: theme.colors.primaryContainer
@@ -46,6 +46,19 @@ export default function SplashScreen({
 			fontSize: theme.fonts.headlineLarge.fontSize,
 			includeFontPadding: false,
 			textTransform: "uppercase"
+		},
+		settings: {
+			padding: 10,
+			position: "absolute",
+			maxWidth: "90%",
+			bottom: 20,
+			backgroundColor: theme.colors.inversePrimary,
+			borderRadius: 5,
+		},
+		settingsText: {
+			textAlign: "center",
+			textAlignVertical: "center",
+			height: 90,
 		}
 	})
 
@@ -87,9 +100,13 @@ export default function SplashScreen({
 			<TouchableOpacity onPress={() => navigation.replace("Game")} style={styles.start}>
 				<Text style={styles.startText}>Start</Text>
 			</TouchableOpacity>
-			<Text variant="bodyLarge">Generations: {generations.map((gen, idx) => {
-				return (idx !== generations.length - 1) ? `${formatGenerationName(gen)}, ` : `${formatGenerationName(gen)}`
-			})}</Text>
+			<TouchableOpacity onPress={() => navigation.push("Settings")} style={styles.settings}>
+				<Text variant="bodyLarge" style={styles.settingsText}>
+					{generations.map((gen, idx) => {
+						return (idx !== generations.length - 1) ? `${formatGenerationName(gen)}, ` : `${formatGenerationName(gen)}`
+					})}
+				</Text>
+			</TouchableOpacity>
 		</View>
 	)
 }
