@@ -17,6 +17,21 @@ export function GameOverScreen({
 			width: "100%",
 			backgroundColor: theme.colors.primaryContainer,
 			alignItems: "center",
+		},
+		gameOver: {
+			flex: 1.5,
+			textAlignVertical: "center",
+			fontSize: theme.fonts.displayLarge.fontSize
+		},
+		score: {
+			flex: 1,
+			fontSize: theme.fonts.displayLarge.fontSize
+		},
+		reset: {
+			flex: 1,
+		},
+		resetText: {
+			fontSize: theme.fonts.displayLarge.fontSize
 		}
 	})
 
@@ -29,9 +44,14 @@ export function GameOverScreen({
 
 	return (
 		<View style={styles.container}>
-			<Text>Game Over</Text>
-			<Text>Score: {gameState.score}</Text>
-			<GenerationsButton onPress={onResetGame} />
+			<Text style={styles.gameOver}>Game Over</Text>
+			<Text style={styles.score}>Score: {gameState.score ?? 0}</Text>
+			<TouchableOpacity onPress={onResetGame} style={styles.reset}>
+				<Text style={styles.resetText}>
+					Retry
+				</Text>
+			</TouchableOpacity>
+			<GenerationsButton onPress={() => navigation.navigate("Settings")} />
 		</View>
 	)
 }
