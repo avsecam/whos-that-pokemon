@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { Alert, View } from "react-native"
 import { Checkbox, List, Switch } from "react-native-paper"
-import { formatGenerationName, getGenerations, LinkData } from "./api/generations"
+import { formatGenerationName, getGenerationNames, getGenerations, LinkData } from "./api/generations"
 import Header, { HEADER_HEIGHT } from "./components/header"
 import { GameContext } from "./context/gameContext"
 
@@ -18,15 +18,15 @@ export function Settings() {
 }
 
 function GenerationPicker() {
-	const [generationList, setGenerationList] = useState<LinkData[]>([])
+	const [generationList, setGenerationList] = useState<string[]>([])
 
 	useEffect(() => {
 		(async () => {
-			setGenerationList(await getGenerations())
+			setGenerationList(await getGenerationNames())
 		})()
 	}, [])
 
-	const rows: JSX.Element[] = generationList.map(gen => <GenerationRow generation={gen} key={gen.name} />)
+	const rows: JSX.Element[] = generationList.map(gen => <GenerationRow generation={gen} key={gen} />)
 
 	return (
 		<>
@@ -40,23 +40,23 @@ function GenerationPicker() {
 function GenerationRow({
 	generation
 }: {
-	generation: LinkData
+	generation: string
 }) {
 	
 	const { generations, toggleGeneration } = useContext(GameContext)
-	const [checked, setChecked] = useState<boolean>(generations.find(gen => gen === generation.name) ? true : false)
+	const [checked, setChecked] = useState<boolean>(generations.find(gen => gen === generation) ? true : false)
 	
 	function handlePress() {
 		if (generations.length === 1 && checked) {
 			Alert.alert("", "Please add at least one generation.")
 			return
 		}
-		toggleGeneration(generation.name)
+		toggleGeneration(generation)
 		setChecked(!checked)
 	}
 	
-	return <Checkbox.Item label={formatGenerationName(generation.name)} onPress={handlePress} status={checked ? "checked" : "unchecked"} disabled={
-		(generation.name === "generation-ix") ? true : false // REMEMBER: Remove this when Generation 9 has sprites
+	return <Checkbox.Item label={formatGenerationName(generation)} onPress={handlePress} status={checked ? "checked" : "unchecked"} disabled={
+		(generation === "generation-ix") ? true : false // REMEMBER: Remove this when Generation 9 has sprites
 	}/>
 }
 

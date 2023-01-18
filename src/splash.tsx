@@ -9,8 +9,9 @@ import { IMAGE_SIZE } from "./game";
 import { formatGenerationName } from "./api/generations";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
+import GenerationsButton from "./components/generationsButton";
 
-const CHANGE_TIMER: number = 3000
+const CHANGE_TIMER: number = 500
 
 export default function SplashScreen({
 	navigation
@@ -47,30 +48,16 @@ export default function SplashScreen({
 			includeFontPadding: false,
 			textTransform: "uppercase"
 		},
-		settings: {
-			padding: 10,
-			position: "absolute",
-			maxWidth: "90%",
-			bottom: 20,
-			backgroundColor: theme.colors.primary,
-			borderRadius: 5,
-		},
-		settingsText: {
-			textAlign: "center",
-			textAlignVertical: "center",
-		}
 	})
 
 	const { generations } = useContext(GameContext)
 
 	const [spriteUrls, setSpriteUrls] = useState<string[]>(Array(50).fill(""))
 	useEffect(() => { // Get random pokemon when generation list changes
-		(() => {
-			(async () => {
-				if (generations.length > 0) {
-					setSpriteUrls(await Promise.all(spriteUrls.map(async () => (await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).spriteUrl)))
-				}
-			})()
+		(async () => {
+			if (generations.length > 0) {
+				setSpriteUrls(await Promise.all(spriteUrls.map(async () => (await getRandomPokemon(getRandomFromArray<string>(generations)) as PokemonData).spriteUrl)))
+			}
 		})()
 	}, [generations])
 
@@ -99,13 +86,7 @@ export default function SplashScreen({
 			<TouchableOpacity onPress={() => navigation.replace("Game")} style={styles.start}>
 				<Text style={styles.startText}>Start</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigation.push("Settings")} style={styles.settings}>
-				<Text variant="bodyLarge" style={styles.settingsText}>
-					{generations.map((gen, idx) => {
-						return (idx !== generations.length - 1) ? `${formatGenerationName(gen)}, ` : `${formatGenerationName(gen)}`
-					})}
-				</Text>
-			</TouchableOpacity>
+			<GenerationsButton onPress={() => navigation.push("Settings")} />
 		</View>
 	)
 }

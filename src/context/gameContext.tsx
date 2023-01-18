@@ -24,6 +24,7 @@ type GameContext = {
 	generations: string[], // Which generations to pick from. IDs
 	toggleGeneration: (id: string) => void,
 	resetPokemonAndChoices: () => void,
+	resetScoreAndLives: () => void,
 	choose: (choice: string) => void,
 	isGameOver: () => boolean,
 }
@@ -31,7 +32,7 @@ type GameContext = {
 export const GameContext = createContext({} as GameContext)
 
 export function GameProvider({ children }: { children: JSX.Element }) {
-	const [gameState, setGameState] = useState<GameState>({ lives: 3 })
+	const [gameState, setGameState] = useState<GameState>({ lives: MAX_LIVES })
 	const [generations, setGenerations] = useState<string[]>([])
 
 	useEffect(() => {
@@ -96,6 +97,14 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 		})
 	}
 
+	function resetScoreAndLives() {
+		setGameState({
+			...gameState,
+			score: 0,
+			lives: MAX_LIVES
+		})
+	}
+
 	// Add / remove generation
 	function toggleGeneration(id: string) {
 		if (!generations) {
@@ -136,6 +145,7 @@ export function GameProvider({ children }: { children: JSX.Element }) {
 			generations,
 			toggleGeneration,
 			resetPokemonAndChoices,
+			resetScoreAndLives,
 			choose,
 			isGameOver,
 		}}>

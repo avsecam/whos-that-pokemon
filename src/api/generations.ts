@@ -12,13 +12,7 @@ export type GenerationData = {
 	pokemonSpecies: LinkData[],
 }
 
-export async function getGenerations() {
-	const generationLinks: LinkData[] = await fetch("https://pokeapi.co/api/v2/generation/")
-		.then(res => res.json())
-		.then(data => (data.results as LinkData[]))
-
-	return generationLinks
-}
+const GENERATION_NAME_PATTERN: RegExp = /generation-[a-z]*/
 
 export async function generationsAreSaved() {
 	let generationsAreSaved: boolean = true
@@ -52,13 +46,24 @@ export async function saveGenerationData() {
 	console.log("Generation Data Saved")
 }
 
+export async function getGenerationNames() {
+	return (await AsyncStorage.getAllKeys()).filter(key => GENERATION_NAME_PATTERN.test(key))
+}
+
+export async function getGenerations() {
+	const generations = await fetch("https://pokeapi.co/api/v2/generation/")
+		.then(res => res.json())
+		.then(data => (data.results as LinkData[]))
+
+	return generations
+}
+
 // Get any generation from ALL of the generations
 export async function getRandomGeneration() {
-	const generationNamePattern: RegExp = /generation-[a-z]*/;
-	const generationKeys: string[] = (await AsyncStorage.getAllKeys()).filter(key => generationNamePattern.test(key))
+	const generationKeys: string[] = await getGenerationNames()
 	const randomGenerationKey: number = Number.parseInt((Math.random() * (generationKeys.length - 1)).toFixed(0))
 	const randomGeneration: GenerationData = JSON.parse(await AsyncStorage.getItem(generationKeys[randomGenerationKey]) ?? "{}")
-	
+
 	return randomGeneration.name
 }
 

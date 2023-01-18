@@ -4,6 +4,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 import { GameProvider } from './context/gameContext';
 import GameContainer from './game'
+import { GameOverScreen } from './gameOver';
 import { Settings } from './settings';
 import SplashScreen from './splash';
 
@@ -34,6 +35,7 @@ export default function App() {
 						<Stack.Screen name='Game' component={GameContainer} />
 						<Stack.Screen name='Splash' component={SplashScreen} />
 						<Stack.Screen name='Settings' component={Settings} />
+						<Stack.Screen name='Game Over' component={GameOverScreen} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</GameProvider>

@@ -25,6 +25,12 @@ export default function GameContainer({
 		}
 	}, [])
 
+	useEffect(() => {
+		if ((gameState.lives ?? 0) <= 0) {
+			navigation.replace("Game Over")
+		}
+	}, [gameState.lives])
+
 	return (
 		<View style={{ height: "100%" }}>
 			<Header showButton={true} onButtonPress={() => { navigation.navigate("Settings") }} />
